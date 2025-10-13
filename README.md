@@ -25,3 +25,8 @@ module.exports = {
   }]
 };
 ```
+
+File yêu cầu trong github
+- dist/
+- ecosystem.config.js
+- .env
