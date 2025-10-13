@@ -1,0 +1,27 @@
+name: Nest Deploy (PM2)
+on:
+  workflow_call:
+    inputs:
+      app_path: { required: true, type: string }
+      pm2_name: { required: true, type: string }
+      node: { type: string, default: '20' }
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: ${{ inputs.node }} }
+      - run: npm ci
+      - run: npm run build
+      - name: Ensure folder & sync
+        run: |
+          sudo mkdir -p "${{ inputs.app_path }}"
+          sudo chown -R $USER:$USER "${{ inputs.app_path }}"
+          rsync -a --delete --exclude='.git' ./ "${{ inputs.app_path }}"/
+      - name: Prod deps & PM2
+        run: |
+          cd "${{ inputs.app_path }}"
+          npm ci --omit=dev
+          pm2 start ecosystem.config.js || pm2 restart "${{ inputs.pm2_name }}"
+          pm2 save
