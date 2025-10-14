@@ -1,19 +1,29 @@
 name: Next Deploy (PM2)
+
 on:
   workflow_call:
     inputs:
-      app_path: { required: true, type: string }   # /srv/apps/my-next
-      pm2_name: { required: true, type: string }   # my-next
-      node: { type: string, default: '20' }
+      app_path:
+        required: true
+        type: string   # /srv/apps/my-next
+      pm2_name:
+        required: true
+        type: string   # my-next
+      node:
+        type: string
+        default: '20'
+
 jobs:
   deploy:
     runs-on: self-hosted
+
     steps:
       - uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
-        with: { node-version: ${{ inputs.node }} }
+        with:
+          node-version: ${{ inputs.node }}
 
       # Cài & build trên runner (máy VPS)
       - name: Install deps
@@ -32,7 +42,7 @@ jobs:
       - name: Start/Restart PM2
         run: |
           cd "${{ inputs.app_path }}"
-          # trong runtime chỉ cần deps production
+          # Trong runtime chỉ cần deps production
           npm ci --omit=dev
           pm2 start ecosystem.config.js || pm2 restart "${{ inputs.pm2_name }}"
           pm2 save
