@@ -13,8 +13,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with: { node-version: ${{ inputs.node }} }
-      - run: npm ci
-      - run: npm run build
+      - name: Install dependencies
+        run: npm ci
+      - name: Build application
+        run: npm run build
       - name: Ensure folder & sync
         run: |
           sudo mkdir -p "${{ inputs.app_path }}"
