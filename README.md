@@ -8,7 +8,7 @@ on:
     branches: [ main ]
 jobs:
   call:
-    uses: Vntez/.github/.github/workflows/nest-pm2.yml@main
+    uses: Vntez/.github/workflows/nest-pm2.yml@main
     with:
       app_path: /srv/apps/<name-services>
       pm2_name: <name-services>
@@ -41,7 +41,7 @@ on:
     branches: [ main ]
 jobs:
   call:
-    uses: Vntez/.github/.github/workflows/next-pm2.yml@main
+    uses: Vntez/.github/workflows/next-pm2.yml@main
     with:
       app_path: /srv/apps/<name-services>
       pm2_name: <name-services>
